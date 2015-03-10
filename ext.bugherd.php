@@ -63,7 +63,7 @@ class Bugherd_ext {
 
     $methods = array(
       'template_post_parse' => 'add_bugherd_frontend',
-      'cp_js_end' => 'add_bugherd_cp');
+      'cp_menu_array' => 'add_bugherd_cp');
 
     foreach ($methods as $hook => $method) {
       $data = array(
@@ -222,14 +222,14 @@ class Bugherd_ext {
     return $template;
   }
 
-  public function add_bugherd_cp() {
+  public function add_bugherd_cp($menu) {
     if (ee()->extensions->last_call !== FALSE) {
       $output = ee()->extensions->last_call;
     }
 
     $javascript = $this->get_snippet();
     if (!is_null($javascript)) {
-      $output .= $javascript;
+      ee()->javascript->output($javascript);
     }
 
     return $output;
