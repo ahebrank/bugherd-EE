@@ -229,7 +229,7 @@ class Bugherd_ext {
 
     $javascript = $this->get_snippet();
     if (!is_null($javascript)) {
-      ee()->javascript->output($javascript);
+      ee()->cp->add_to_foot($javascript);
     }
 
     return $output;
