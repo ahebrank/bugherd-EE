@@ -66,7 +66,7 @@ class Bugherd_ext {
       'class'   => __CLASS__,
       'method'  => 'add_bugherd_frontend',
       'hook'    => 'template_post_parse',
-      'settings'  => serialize($this->settings),
+      'settings' => serialize($this->settings),
       'version' => $this->version,
       'enabled' => 'y'
     );
@@ -223,10 +223,16 @@ class Bugherd_ext {
   }
 
   public function add_bugherd_cp() {
+    if (ee()->extensions->last_call !== FALSE) {
+      $output = ee()->extensions->last_call;
+    }
+
     $javascript = $this->get_snippet();
     if (!is_null($javascript)) {
-      return $javascript;
+      $output .= $javascript;
     }
+
+    return $output;
   }
 }
 // END CLASS
