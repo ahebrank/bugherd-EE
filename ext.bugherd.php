@@ -61,21 +61,21 @@ class Bugherd_ext {
         'api_key'   => ''
     );
 
-    // front end
-    $data = array(
-      'class'   => __CLASS__,
-      'method'  => 'add_bugherd_frontend',
-      'hook'    => 'template_post_parse',
-      'settings' => serialize($this->settings),
-      'version' => $this->version,
-      'enabled' => 'y'
-    );
-    ee()->db->insert('extensions', $data);
+    $methods = array(
+      'template_post_parse' => 'add_bugherd_frontend',
+      'cp_js_end' => 'add_bugherd_cp');
 
-    // control panel
-    $data['method'] = 'add_bugherd_cp';
-    $data['hook'] = 'cp_js_end';
-    ee()->db->insert('extensions', $data);
+    foreach ($methods as $hook => $method) {
+      $data = array(
+        'class'   => __CLASS__,
+        'method'  => $method,
+        'hook'    => $hook,
+        'settings' => serialize($this->settings),
+        'version' => $this->version,
+        'enabled' => 'y'
+      );
+      ee()->db->insert('extensions', $data);
+    }
   }
 
   /**
