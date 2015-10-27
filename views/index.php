@@ -8,9 +8,9 @@ $this->table->set_heading(
     lang('setting')
 );
 
-foreach ($settings as $key => $val)
-{
-    $this->table->add_row(lang($key, $key)."<div>".lang('api_description')." <a href='http://www.bugherd.com' target='_blank'>http://www.bugherd.com</a>.</div>", $val);
+$this->table->add_row("<div>".lang('api_description')." <a href='http://www.bugherd.com' target='_blank'>http://www.bugherd.com</a>.</div>");
+foreach ($settings as $key => $val) {
+    $this->table->add_row(lang($key, $key), $val);
 }
 
 echo $this->table->generate();

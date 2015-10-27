@@ -24,7 +24,7 @@ if (!function_exists('ee')) {
 class Bugherd_ext {
 
   var $name         = 'BugHerd';
-    var $version        = '0.1';
+    var $version        = '0.2';
     var $description    = 'Installs BugHerd Sidebar';
     var $settings_exist = 'y';
     var $docs_url       = 'http://docs.bugherd.com/';
@@ -123,6 +123,8 @@ class Bugherd_ext {
 
     // Creates a text input with a default value
     $settings['api_key'] = array('i', '', 'your api key here');
+    $settings['front_end'] = array('r', array('y' => "Yes", 'n' => "No"), 'y');
+    $settings['back_end'] = array('r', array('y' => "Yes", 'n' => "No"), 'y');
 
     return $settings;
   }
@@ -139,10 +141,26 @@ class Bugherd_ext {
 
     $vars = array();
 
+    $front_end = (isset($current['front_end'])) ? $current['front_end'] : 'n';
+    $back_end = (isset($current['back_end'])) ? $current['back_end'] : 'n';
+
+    $yes_no_options = array(
+        'y'   => lang('yes'),
+        'n'    => lang('no')
+    );
+
     $api_key = isset($current['api_key']) ? $current['api_key'] : "";
 
     $vars['settings'] = array(
-        'api_key'   => form_input('api_key', $api_key)
+        'api_key'   => form_input('api_key', $api_key),
+        'front_end' => form_dropdown(
+                    'front_end',
+                    $yes_no_options,
+                    $front_end),
+        'back_end' => form_dropdown(
+                    'back_end',
+                    $yes_no_options,
+                    $back_end),
     );
 
     return ee()->load->view('index', $vars, TRUE);
@@ -164,8 +182,6 @@ class Bugherd_ext {
     unset($_POST['submit']);
 
     ee()->lang->loadfile('bugherd');
-
-    $len = ee()->input->post('api_key');
 
     ee()->db->where('class', __CLASS__);
     ee()->db->update('extensions', array('settings' => serialize($_POST)));
@@ -207,6 +223,9 @@ class Bugherd_ext {
     if ($sub) {
       return $template;
     }
+    if ($this->settings['front_end'] != 'y') {
+      return $template;
+    }
 
     if (ee()->extensions->last_call !== FALSE) {
       $template = ee()->extensions->last_call;
@@ -225,6 +244,9 @@ class Bugherd_ext {
   public function add_bugherd_cp($menu) {
     if (ee()->extensions->last_call !== FALSE) {
       $output = ee()->extensions->last_call;
+    }
+    if ($this->settings['back_end'] != 'y') {
+      return $output;
     }
 
     $javascript = $this->get_snippet();

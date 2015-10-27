@@ -13,6 +13,10 @@ $lang = array(
 	'name' => 'BugHerd',
 	'description' => 'Installs BugHerd Sidebar',
 	'api_key' => 'BugHerd Project Key',
-	'api_description' => 'The project key can be obtained from within BugHerd:'
+	'api_description' => 'The project key can be obtained from within BugHerd:',
+  'front_end' => 'Install widget on front end?',
+  'back_end' => 'Install widget on back end?',
+  'yes' => 'Yes',
+  'no' => 'No',
 );
 
